@@ -4,6 +4,21 @@ iOS 16+ **纯 UIKit** 半屏库（Swift Package）。从 LaserpeckerOS「我的 
 
 仓库里的 Demo App 只演示这 8 种场景，半屏实现全部走本 Package。
 
+## 打开 Demo（只开这一个）
+
+```text
+PanSheet.xcworkspace
+```
+
+完整路径示例：`/Users/你/path/PanSheet/PanSheet.xcworkspace`。scheme 选 **PanSheetDemo**。
+
+不要打开这些，会报 Couldn't load project / Missing package product：
+
+- 仓库根文件夹（Xcode 会把它当 Swift Package 工程）
+- `.swiftpm/xcode`
+- 仓库根上的 `PanSheet.xcodeproj`（如果还残留，是空壳）
+- 单独的 `Demo/PanSheet.xcodeproj`（请走 workspace，让它解析本地 Package）
+
 ## 集成
 
 最低 **iOS 16**。Xcode：File → Add Package Dependencies…，填下面任一地址。
@@ -113,9 +128,8 @@ PanSheetPresenter.dismiss(from: content)
 ## 怎么跑 Demo
 
 1. 安装 Xcode 16+（本机验证用 Xcode 26 / iOS 26 模拟器）。
-2. 用 Xcode 打开 **`PanSheet.xcworkspace`**（不要打开仓库根上已删除的 `PanSheet.xcodeproj`：它和 `Package.swift` 同级，会报 Missing package product）。
-3. 选 scheme **PanSheetDemo**，iPhone 模拟器。也可以只打开 `Demo/PanSheet.xcodeproj`，它用本地包路径 `..`。
-4. 运行。首页就是源页「Sheet 场景」的入口列表。点某一行弹出对应半屏。
+2. **只打开 `PanSheet.xcworkspace`**，scheme **PanSheetDemo**，iPhone 模拟器。
+3. 运行。首页就是源页「Sheet 场景」的入口列表。点某一行弹出对应半屏。
 
 重新生成 Demo 工程：
 
@@ -181,10 +195,10 @@ xcrun simctl launch <SIM_UDID> com.hwq.PanSheet
 ## 工程结构
 
 ```text
-Package.swift                 Swift Package（产品名 PanSheet，给别的工程 Add Package）
+Package.swift                 Swift Package（产品名 PanSheet）
 Sources/PanSheet/             可复用 UIKit
-PanSheet.xcworkspace          打开这个：含本地包 + Demo
-Demo/PanSheet.xcodeproj       Demo App，本地 SPM 引用 path: ..
+PanSheet.xcworkspace          只打开这个
+Demo/PanSheet.xcodeproj       由 workspace 加载；本地 SPM path: ..
 Demo/App + Demo/Demos         场景页
 Docs/screenshots/
 scripts/generate-demo.sh

@@ -1,6 +1,12 @@
 .DS_Store
 .build/
-.swiftpm/
+.swiftpm/*
+!.swiftpm/xcode/
+.swiftpm/xcode/*
+!.swiftpm/xcode/package.xcworkspace/
+.swiftpm/xcode/package.xcworkspace/*
+!.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+/PanSheet.xcodeproj
 xcuserdata/
 **/xcuserdata/
 *.xcuserstate

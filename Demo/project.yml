@@ -41,3 +41,10 @@ targets:
         PRODUCT_MODULE_NAME: PanSheetDemo
         CODE_SIGNING_ALLOWED: "NO"
         CODE_SIGNING_REQUIRED: "NO"
+schemes:
+  PanSheetDemo:
+    build:
+      targets:
+        PanSheetDemo: all
+    run:
+      config: Debug

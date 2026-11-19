@@ -27,7 +27,6 @@
 
 /* Begin PBXFileReference section */
 		02B6B8A7067E74A05FAF9232 /* HomeListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeListViewController.swift; sourceTree = "<group>"; };
-		2E45633A07D51234ECBB0B4F /* PanSheet */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PanSheet; path = ..; sourceTree = SOURCE_ROOT; };
 		2FC693C37C4C967840CCE0E3 /* ListPinnedBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListPinnedBarViewController.swift; sourceTree = "<group>"; };
 		32E1995E3723353071F117D2 /* InputSingleLineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputSingleLineViewController.swift; sourceTree = "<group>"; };
 		39A547B301DB36A1FA57E7B9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -99,7 +98,6 @@
 		5EB1AD34354E8A439E826394 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				2E45633A07D51234ECBB0B4F /* PanSheet */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
