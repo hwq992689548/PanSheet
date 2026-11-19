@@ -1,3 +1,4 @@
+import PanSheet
 import UIKit
 
 /// 固定高度 · 场景2：底栏贴 body 下，与 body 共同进退。

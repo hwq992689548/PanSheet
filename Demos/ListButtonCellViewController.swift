@@ -1,3 +1,4 @@
+import PanSheet
 import UIKit
 
 /// 列表 · 场景2：原生表末行按钮 Cell 跟手滚，不用 SafeBottomBar。

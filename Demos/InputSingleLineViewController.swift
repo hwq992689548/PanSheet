@@ -1,3 +1,4 @@
+import PanSheet
 import UIKit
 
 /// 输入框 · 单行：顶栏 + 单行输入 + 钉底栏；单档满高，跟键盘抬高。

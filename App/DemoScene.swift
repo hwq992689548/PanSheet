@@ -1,3 +1,4 @@
+import PanSheet
 import UIKit
 
 /// 与 LaserpeckerOS「开发调试 → Sheet 场景」入口一一对应，不另造变体。
@@ -107,6 +108,40 @@ enum DemoScene: String, CaseIterable {
     /// 启动参数 `--tour`：依次带动画弹出全部场景。
     static func shouldRunTour() -> Bool {
         ProcessInfo.processInfo.arguments.contains("--tour")
+    }
+
+    /// 用库的配置对象弹出对应场景。
+    func present(from host: UIViewController, animated: Bool) {
+        guard let config = makeConfig(animated: animated) else { return }
+        PanSheetPresenter.present(from: host, config: config)
+    }
+
+    /// 8 种场景各自一份 `PanSheetConfig`。
+    func makeConfig(animated: Bool) -> PanSheetConfig? {
+        var config: PanSheetConfig
+        switch self {
+        case .home:
+            return nil
+        case .fixed1:
+            config = .fixedManagedSafeBottom(content: FixedHeightManagedSafeBottomViewController())
+        case .fixed2:
+            config = .fixedBottomBarFollow(content: FixedHeightBottomBarFollowViewController())
+        case .fixed3:
+            config = .fixedPinnedBar(content: FixedHeightPinnedBarViewController())
+        case .inputSingle:
+            config = .inputSingleLine(content: InputSingleLineViewController())
+        case .inputMulti:
+            config = .inputMultiline(content: InputMultilineViewController())
+        case .listFill:
+            config = .listFill(content: ListFillViewController())
+        case .listButton:
+            config = .listButtonCell(content: ListButtonCellViewController())
+        case .listPinned:
+            config = .listPinnedBar(content: ListPinnedBarViewController())
+        }
+        config.animated = animated
+        config.isModalInPresentation = ProcessInfo.processInfo.arguments.contains("--hold-sheet")
+        return config
     }
 }
 

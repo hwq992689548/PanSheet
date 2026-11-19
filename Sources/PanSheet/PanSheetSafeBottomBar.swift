@@ -1,7 +1,7 @@
 import UIKit
 
-/// 贴底操作条。非键盘底 inset = max(24, safeBottom)；键盘时顶底都是 12。对齐源 `LPSafeBottomBar`。
-final class PanSheetSafeBottomBar: UIView {
+/// 贴底操作条。非键盘底 inset = max(24, safeBottom)；键盘时顶底都是 12。
+public final class PanSheetSafeBottomBar: UIView {
     /// 内容容器。
     private let contentView = UIView()
 
@@ -12,12 +12,12 @@ final class PanSheetSafeBottomBar: UIView {
     private var contentBottomConstraint: NSLayoutConstraint?
 
     /// 覆盖 Home 高度；nil 时读 window。
-    var safeBottomOverride: CGFloat? {
+    public var safeBottomOverride: CGFloat? {
         didSet { reloadBottomInset() }
     }
 
     /// 键盘抬起时底间距改成 12。
-    var isKeyboardLifted = false {
+    public var isKeyboardLifted = false {
         didSet {
             guard oldValue != isKeyboardLifted else { return }
             reloadBottomInset()
@@ -25,9 +25,9 @@ final class PanSheetSafeBottomBar: UIView {
     }
 
     /// 点确定。
-    var onTap: (() -> Void)?
+    public var onTap: (() -> Void)?
 
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = PanSheetPalette.backgroundWhite
         contentView.translatesAutoresizingMaskIntoConstraints = false
@@ -58,37 +58,37 @@ final class PanSheetSafeBottomBar: UIView {
         setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         nil
     }
 
-    override var intrinsicContentSize: CGSize {
+    public override var intrinsicContentSize: CGSize {
         CGSize(width: UIView.noIntrinsicMetric, height: fittingHeight())
     }
 
-    override func didMoveToWindow() {
+    public override func didMoveToWindow() {
         super.didMoveToWindow()
         reloadBottomInset()
     }
 
-    override func safeAreaInsetsDidChange() {
+    public override func safeAreaInsetsDidChange() {
         super.safeAreaInsetsDidChange()
         reloadBottomInset()
     }
 
     /// 写入按钮无障碍 id。
-    func setAccessibilityName(_ name: String) {
+    public func setAccessibilityName(_ name: String) {
         actionButton.accessibilityIdentifier = name
         accessibilityIdentifier = name
     }
 
     /// 当前条总高。
-    func fittingHeight() -> CGFloat {
+    public func fittingHeight() -> CGFloat {
         Self.fittingHeight(safeBottom: resolveSafeBottom(), keyboardLifted: isKeyboardLifted)
     }
 
     /// 量 panel / snap 用的条高。
-    static func fittingHeight(safeBottom: CGFloat, keyboardLifted: Bool) -> CGFloat {
+    public static func fittingHeight(safeBottom: CGFloat, keyboardLifted: Bool) -> CGFloat {
         let bottom: CGFloat
         if keyboardLifted {
             bottom = PanSheetMetrics.bottomBarTopInset

@@ -3,7 +3,7 @@ import UIKit
 extension UIViewController {
     /// 装半屏顶栏并钉在 content 顶。
     @discardableResult
-    func installNavBar(title: String) -> PanSheetNavBar {
+    public func installNavBar(title: String) -> PanSheetNavBar {
         let bar = PanSheetNavBar()
         bar.setTitle(title)
         bar.onConfirm = { [weak self] in

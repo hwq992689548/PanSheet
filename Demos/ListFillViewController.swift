@@ -1,3 +1,4 @@
+import PanSheet
 import UIKit
 
 /// 列表 · 场景1：顶栏 + 原生 UITableView 铺满，无底栏。

@@ -1,3 +1,4 @@
+import PanSheet
 import UIKit
 
 /// 列表 · 场景3：原生表贴栏顶；底栏钉 content 底；表 inset 为 0。

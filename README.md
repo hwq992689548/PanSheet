@@ -1,12 +1,97 @@
 # PanSheet
 
-独立的 **UIKit + Swift** 半屏演示 App。从 LaserpeckerOS「我的 → 开发调试 → Sheet 场景」抽出当时真实存在的用法，去掉激光业务，用系统 `UISheetPresentationController`（iOS 16+ 自定义 detent）对照实现。
+iOS 16+ **纯 UIKit** 半屏库（Swift Package）。从 LaserpeckerOS「我的 → 开发调试 → Sheet 场景」抽出当时真实存在的 8 种用法，用系统 `UISheetPresentationController` 自定义 detent 实现。不含激光业务，也不依赖 CocoaPods。
 
-源工程只读，本仓库不依赖 LaserpeckerOS。
+仓库里的 Demo App 只演示这 8 种场景，半屏实现全部走本 Package。
+
+## 集成
+
+最低 **iOS 16**。Xcode：File → Add Package Dependencies…，填下面任一地址。
+
+**GitHub**
+
+```text
+https://github.com/hwq992689548/PanSheet
+```
+
+Dependency Rule 选 Branch `main`，或 Version：Up to Next Major from `1.0.0`。
+
+**本地路径**
+
+```text
+/Users/你/path/PanSheet
+```
+
+Swift Package 清单：
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/hwq992689548/PanSheet.git", from: "1.0.0"),
+    // 或本地：
+    // .package(path: "../PanSheet"),
+]
+```
+
+然后在 target 里加 `PanSheet`。
+
+### 最小调用
+
+自己准备内容页，用配置对象弹出。`followsScrolling` 默认打开：贴顶的 `UITableView` 滚到边界时，半屏跟手上移 / 下移。
+
+```swift
+import PanSheet
+import UIKit
+
+final class HostViewController: UIViewController {
+    func openListSheet() {
+        let content = MyListViewController()
+        PanSheetPresenter.present(
+            from: self,
+            config: .listFill(content: content)
+        )
+    }
+}
+```
+
+8 种场景工厂：
+
+```swift
+PanSheetPresenter.present(from: self, config: .fixedManagedSafeBottom(content: vc))
+PanSheetPresenter.present(from: self, config: .fixedBottomBarFollow(content: vc))
+PanSheetPresenter.present(from: self, config: .fixedPinnedBar(content: vc))
+PanSheetPresenter.present(from: self, config: .inputSingleLine(content: vc))
+PanSheetPresenter.present(from: self, config: .inputMultiline(content: vc))
+PanSheetPresenter.present(from: self, config: .listFill(content: vc))
+PanSheetPresenter.present(from: self, config: .listButtonCell(content: vc))
+PanSheetPresenter.present(from: self, config: .listPinnedBar(content: vc))
+```
+
+自定义档：
+
+```swift
+var config = PanSheetConfig(
+    content: content,
+    layout: .custom([
+        .fraction(0.45, id: "low"),
+        .fraction(0.80, id: "high"),
+    ]),
+    followsScrolling: true
+)
+PanSheetPresenter.present(from: self, config: config)
+```
+
+键盘或正文变高时改输入档：
+
+```swift
+PanSheetPresenter.updateInputDetent(on: content, panelHeight: newHeight)
+PanSheetPresenter.dismiss(from: content)
+```
+
+顶栏 / 底栏也可直接用：`installNavBar(title:)`、`PanSheetSafeBottomBar`。
 
 ## 预览
 
-半屏弹出之后，在内容上滑：sheet 跟手上移；再下滑：sheet 跟手下移（列表场景是表内滚动联动，其它场景拖抓手换档）。8 条小 GIF，四列两行，避免 GitHub 竖着撑很高。
+半屏弹出之后，在内容上滑：sheet 跟手上移；再下滑：sheet 跟手下移（列表场景是表内滚动联动，其它场景拖抓手换档）。8 条小 GIF，四列两行。
 
 <table>
   <tr>
@@ -23,19 +108,17 @@
   </tr>
 </table>
 
-## 怎么跑
+## 怎么跑 Demo
 
 1. 安装 Xcode 16+（本机验证用 Xcode 26 / iOS 26 模拟器）。
-2. 打开 `PanSheet.xcodeproj`，选一台 **iPhone** 模拟器。
-3. 运行 `PanSheet`。首页就是源页「Sheet 场景」的入口列表。
+2. 打开 `PanSheet.xcodeproj`，选 scheme **PanSheetDemo**，iPhone 模拟器。
+3. 运行。首页就是源页「Sheet 场景」的入口列表。
 4. 点某一行，弹出对应半屏。拖抓手换档、点遮罩或右上勾 /「确定」关闭。
 
-命令行（把 `id=` 换成 `xcrun simctl list devices available` 里已启动的模拟器）：
-
 ```bash
-cd /Users/feixiang/Desktop/hwq/PanSheet
+cd /path/to/PanSheet
 xcodegen generate
-xcodebuild -project PanSheet.xcodeproj -scheme PanSheet \
+xcodebuild -project PanSheet.xcodeproj -scheme PanSheetDemo \
   -destination 'platform=iOS Simulator,id=<SIM_UDID>' \
   -derivedDataPath build/DerivedData \
   CODE_SIGNING_ALLOWED=NO build
@@ -57,63 +140,44 @@ xcrun simctl launch <SIM_UDID> com.hwq.PanSheet
 
 都是 **四号半屏**（挡背后、点外可关、可下拉关）。源引擎是 `XWonderSheet`；这里用系统 page sheet + 自定义 detent 表达同一套档位。
 
-固定高度场景 1 / 2 默认停在相对满高 **0.5**，上拖到 1 才能看到橙垫或跟手底栏（低档时从底部裁切，与源「表面 < preferred 则 content 向下溢出」一致）。场景 3 与列表默认停在整屏 **0.45**，底栏（若有）钉在半屏底。
+固定高度场景 1 / 2 默认停在相对满高 **0.5**，上拖到 1 才能看到橙垫或跟手底栏。场景 3 与列表默认停在整屏 **0.45**，底栏（若有）钉在半屏底。
 
-| 分组 | 场景 | 何时用 | 档位 |
+| 分组 | 场景 | 配置工厂 | 档位 |
 | --- | --- | --- | --- |
-| 固定高度 | 场景1·内容自管 safeBottom | 内容有固定 body，Home 指示条由内容自己垫橙条，不要把 safeBottom 算进 body | 相对内容满高 **0.5 + 1**，默认停 0.5 |
-| 固定高度 | 场景2·底栏跟手 | 底栏贴在 body 下面，拖高时和 body **一起走**，余高留给壳白底 | 同上 |
-| 固定高度 | 场景3·钉底栏 | 底栏钉在半屏底不动，变高只拉 body 与底栏之间的空隙 | 整屏 **0.45 + 0.8**，默认 0.45 |
-| 输入框 | 单行输入 + 底栏 | 单行字段 + 确定条；键盘起来时底栏间距改 12，半屏跟着抬 | **单档满高** |
-| 输入框 | 多行 120～240 往上撑开 | 多行输入随文本 120～240 往上长，底栏钉底不往键盘里掉 | **单档满高** |
-| 列表 | 场景1·列表铺满 | 只有表，没有底栏；表铺满顶栏以下，底 inset = Home | 整屏 **0.45 + 0.8** |
-| 列表 | 场景2·按钮Cell | 确定按钮是表的最后一行，跟着列表滚 | 整屏 **0.45 + 0.8** |
-| 列表 | 场景3·钉底栏 | 表底对齐底栏顶；底栏自带 safeBottom，表 inset = 0 | 整屏 **0.45 + 0.8** |
+| 固定高度 | 场景1·内容自管 safeBottom | `.fixedManagedSafeBottom` | 相对内容满高 **0.5 + 1** |
+| 固定高度 | 场景2·底栏跟手 | `.fixedBottomBarFollow` | 同上 |
+| 固定高度 | 场景3·钉底栏 | `.fixedPinnedBar` | 整屏 **0.45 + 0.8** |
+| 输入框 | 单行输入 + 底栏 | `.inputSingleLine` | **单档满高** |
+| 输入框 | 多行 120～240 往上撑开 | `.inputMultiline` | **单档满高** |
+| 列表 | 场景1·列表铺满 | `.listFill` | 整屏 **0.45 + 0.8** |
+| 列表 | 场景2·按钮Cell | `.listButtonCell` | 整屏 **0.45 + 0.8** |
+| 列表 | 场景3·钉底栏 | `.listPinnedBar` | 整屏 **0.45 + 0.8** |
 
 不要把场景 2（跟手）和场景 3（钉底）混用：2 是 `底栏.top = body.bottom`；3 是 `底栏.bottom = 父底`，中间另留 gap / 表。
 
-## 关键 API
+## 公开 API
 
-| 能力 | 本 Demo | LaserpeckerOS 源 |
-| --- | --- | --- |
-| 弹出 | `PanSheetPresenter.present` → `modalPresentationStyle = .pageSheet` | `XWonderSheetViewController.present(from:)` |
-| 档位 | `UISheetPresentationController.Detent.custom`（iOS 16） | `XWonderSnap.fixed` / `.rate` |
-| 抓手 | `prefersGrabberVisible = true` | 壳 + `LPSheetNavBar` 拖动手把 |
-| 列表跟手扩档 | `prefersScrollingExpandsWhenScrolledToEdge` | `trackedScrollView` 嵌套滚动 |
-| 顶栏 | `PanSheetNavBar`（56、白底、勾确认） | `LPSheetNavBar` |
-| 底栏 | `PanSheetSafeBottomBar`（顶 12、底 `max(24, safeBottom)`，键盘时 12） | `LPSafeBottomBar` |
-| 键盘 | `keyboardWillChangeFrame` 改 detent + `isKeyboardLifted` | `liftsWithKeyboard` / `bottomOffset` |
+| 能力 | API |
+| --- | --- |
+| 弹出 | `PanSheetPresenter.present(from:config:)` |
+| 配置 | `PanSheetConfig` + 上表 8 个工厂；`layout` / `followsScrolling` |
+| 档位 | `PanSheetLayout`、`PanSheetDetent.height` / `.fraction` |
+| 关闭 | `PanSheetPresenter.dismiss(from:)` |
+| 输入改高 | `PanSheetPresenter.updateInputDetent(on:panelHeight:)` |
+| 列表跟手 | `config.followsScrolling` → `prefersScrollingExpandsWhenScrolledToEdge` |
+| 顶栏 | `installNavBar(title:)` / `PanSheetNavBar` |
+| 底栏 | `PanSheetSafeBottomBar` |
+| 常量 | `PanSheetMetrics`、`PanSheetPalette`、`PanSheetContentRelativeSnaps` |
 
-内容定高换算（场景 1 / 2）与源 `DebugSheetScenarioContentRelativeSnaps.fixedSnaps(rates: [0.5, 1])` 一致：表面高 = panel × rate。列表 / 钉底栏用整屏比例，不要按 panel 再换 0.5/1。
-
-## 和 LaserpeckerOS 场景的对应
-
-源入口：`apps/ios/core/ui/Sources/LPCoreUI/Debug/Sheet/Scenarios/DebugSheetScenariosViewController.swift`  
-规范：`docs/界面规范/Sheet场景.md`
-
-| 本 Demo | 源 content VC | 源入口 id |
-| --- | --- | --- |
-| `HomeListViewController` | `DebugSheetScenariosViewController` | `debug-sheet-scenarios` |
-| `FixedHeightManagedSafeBottomViewController` | `DebugSheetScenario1FixedHeightContentViewController` | `debug-sheet-scenario-1-content-managed` |
-| `FixedHeightBottomBarFollowViewController` | `DebugSheetScenario2BottomBarFollowContentViewController` | `debug-sheet-scenario-2-bottom-bar` |
-| `FixedHeightPinnedBarViewController` | `DebugSheetScenario3PinnedBarContentViewController` | `debug-sheet-scenario-3-pinned-bar` |
-| `InputSingleLineViewController` | `DebugSheetScenario1InputSingleLineContentViewController` | `debug-sheet-scenario-input-single` |
-| `InputMultilineViewController` | `DebugSheetScenario2InputMultilineContentViewController` | `debug-sheet-scenario-input-multi` |
-| `ListFillViewController` | `DebugSheetScenario1ListFillContentViewController` | `debug-sheet-scenario-list-fill` |
-| `ListButtonCellViewController` | `DebugSheetScenario2ListButtonCellContentViewController` | `debug-sheet-scenario-list-scroll-bar` |
-| `ListPinnedBarViewController` | `DebugSheetScenario3ListPinnedBarContentViewController` | `debug-sheet-scenario-list-pinned` |
-
-源页里没有的用法（一号 / 二号 ActionSheet / 五号穿透 / 嵌套二次 present 等）**没有**做进本 Demo。
-
-静态九宫格单帧：`Docs/screenshots/grid-3x3.png`。
+源页里没有的用法（一号 / 二号 ActionSheet / 五号穿透 / 嵌套二次 present 等）没有做进本库。
 
 ## 工程结构
 
 ```text
-App/          入口、首页列表、场景枚举
-Demos/        每种用法一个 ViewController，外加半屏壳 / 顶栏 / 底栏
-Docs/screenshots/   *-scroll.gif 跟手网格，另有静态九宫格
-scripts/capture-screenshots.sh
-scripts/capture-scroll-gifs.sh
-scripts/sim-drag.swift
+Package.swift            Swift Package（产品名 PanSheet）
+Sources/PanSheet/        可复用 UIKit：Presenter / Config / 档位 / 顶栏底栏
+App/ + Demos/            Demo App 场景页，依赖 Package，不再内嵌一份实现
+PanSheet.xcodeproj       scheme PanSheetDemo
+Docs/screenshots/        *-scroll.gif 跟手网格
+scripts/
 ```

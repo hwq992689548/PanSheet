@@ -1,7 +1,7 @@
 import UIKit
 
-/// 半屏顶栏：高 56、白底、底部分割线、右侧勾确认。对齐源 `LPSheetNavBar`。
-final class PanSheetNavBar: UIView {
+/// 半屏顶栏：高 56、白底、底部分割线、右侧勾确认。
+public final class PanSheetNavBar: UIView {
     /// 标题。
     private let titleLabel = UILabel()
 
@@ -12,9 +12,9 @@ final class PanSheetNavBar: UIView {
     private let divider = UIView()
 
     /// 点确认。
-    var onConfirm: (() -> Void)?
+    public var onConfirm: (() -> Void)?
 
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = PanSheetPalette.backgroundWhite
         titleLabel.font = .systemFont(ofSize: 17, weight: .semibold)
@@ -49,12 +49,12 @@ final class PanSheetNavBar: UIView {
         setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         nil
     }
 
     /// 写入标题。
-    func setTitle(_ title: String) {
+    public func setTitle(_ title: String) {
         titleLabel.text = title
     }
 

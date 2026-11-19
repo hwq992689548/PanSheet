@@ -1,3 +1,4 @@
+import PanSheet
 import UIKit
 
 /// 首页：对照源 `DebugSheetScenariosViewController` 的入口列表。
@@ -59,7 +60,7 @@ final class HomeListViewController: UIViewController {
         }
         guard let scene = DemoScene.fromLaunchArguments(), scene != .home else { return }
         didAutoPresent = true
-        PanSheetPresenter.present(scene, from: self, animated: false)
+        scene.present(from: self, animated: false)
     }
 
     /// 录制用：选中对应行 → 带动画打开 → 停一下 → 关掉 → 下一个。
@@ -70,7 +71,7 @@ final class HomeListViewController: UIViewController {
         if let path = indexPath(for: scene) {
             tableView.selectRow(at: path, animated: true, scrollPosition: .middle)
         }
-        PanSheetPresenter.present(scene, from: self, animated: true)
+        scene.present(from: self, animated: true)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.45) { [weak self] in
             guard let self else { return }
             self.dismiss(animated: true) {
@@ -145,6 +146,6 @@ extension HomeListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let scene = groups[indexPath.section].scenes[indexPath.row]
-        PanSheetPresenter.present(scene, from: self, animated: true)
+        scene.present(from: self, animated: true)
     }
 }

@@ -5,6 +5,9 @@ options:
     iOS: "16.0"
   createIntermediateGroups: true
   generateEmptyDirectories: true
+packages:
+  PanSheet:
+    path: .
 settings:
   base:
     SWIFT_VERSION: "5.0"
@@ -21,16 +24,20 @@ settings:
     MARKETING_VERSION: "1.0.0"
     SWIFT_EMIT_LOC_STRINGS: "NO"
 targets:
-  PanSheet:
+  PanSheetDemo:
     type: application
     platform: iOS
     sources:
       - path: App
       - path: Demos
+    dependencies:
+      - package: PanSheet
+        product: PanSheet
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.hwq.PanSheet
         INFOPLIST_FILE: App/Info.plist
         PRODUCT_NAME: PanSheet
+        PRODUCT_MODULE_NAME: PanSheetDemo
         CODE_SIGNING_ALLOWED: "NO"
         CODE_SIGNING_REQUIRED: "NO"

@@ -1,3 +1,4 @@
+import PanSheet
 import UIKit
 
 /// 固定高度 · 场景3：body 与底栏互不连接；中间 gap 吃变高；整屏 0.45 + 0.8。

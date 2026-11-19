@@ -1,3 +1,4 @@
+import PanSheet
 import UIKit
 
 /// 固定高度 · 场景1：顶栏 + body 恒 500 + 内容自管橙 safe 垫。
