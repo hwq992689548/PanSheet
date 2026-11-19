@@ -50,9 +50,48 @@ final class HomeListViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         guard !didAutoPresent else { return }
+        if DemoScene.shouldRunTour() {
+            didAutoPresent = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.55) { [weak self] in
+                self?.runTour(at: 0)
+            }
+            return
+        }
         guard let scene = DemoScene.fromLaunchArguments(), scene != .home else { return }
         didAutoPresent = true
         PanSheetPresenter.present(scene, from: self, animated: false)
+    }
+
+    /// 录制用：选中对应行 → 带动画打开 → 停一下 → 关掉 → 下一个。
+    private func runTour(at index: Int) {
+        let scenes = DemoScene.tourScenes
+        guard index < scenes.count else { return }
+        let scene = scenes[index]
+        if let path = indexPath(for: scene) {
+            tableView.selectRow(at: path, animated: true, scrollPosition: .middle)
+        }
+        PanSheetPresenter.present(scene, from: self, animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.45) { [weak self] in
+            guard let self else { return }
+            self.dismiss(animated: true) {
+                if let path = self.indexPath(for: scene) {
+                    self.tableView.deselectRow(at: path, animated: true)
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.42) { [weak self] in
+                    self?.runTour(at: index + 1)
+                }
+            }
+        }
+    }
+
+    /// 场景在首页表里的位置。
+    private func indexPath(for scene: DemoScene) -> IndexPath? {
+        for (section, group) in groups.enumerated() {
+            if let row = group.scenes.firstIndex(of: scene) {
+                return IndexPath(row: row, section: section)
+            }
+        }
+        return nil
     }
 
     /// 顶部说明。

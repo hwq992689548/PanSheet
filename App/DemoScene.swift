@@ -98,6 +98,16 @@ enum DemoScene: String, CaseIterable {
         }
         return nil
     }
+
+    /// 录 GIF 时按源列表顺序打开这 8 个半屏。
+    static var tourScenes: [DemoScene] {
+        DemoSceneGroup.allCases.flatMap(\.scenes)
+    }
+
+    /// 启动参数 `--tour`：依次带动画弹出全部场景。
+    static func shouldRunTour() -> Bool {
+        ProcessInfo.processInfo.arguments.contains("--tour")
+    }
 }
 
 /// 首页分组，对齐源页 Section。

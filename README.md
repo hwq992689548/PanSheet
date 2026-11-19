@@ -4,6 +4,14 @@
 
 源工程只读，本仓库不依赖 LaserpeckerOS。
 
+## 预览
+
+循环总览：首页列表依次打开 8 个半屏再关掉（iPhone 17 Pro 模拟器，约 20 秒）。只放这一张小尺寸 GIF，GitHub 预览不会竖着撑很高。
+
+<p align="center">
+  <img src="Docs/screenshots/tour.gif" width="280" alt="8 个 Sheet 场景打开过程">
+</p>
+
 ## 怎么跑
 
 1. 安装 Xcode 16+（本机验证用 Xcode 26 / iOS 26 模拟器）。
@@ -25,11 +33,14 @@ xcrun simctl install <SIM_UDID> \
 xcrun simctl launch <SIM_UDID> com.hwq.PanSheet
 ```
 
-截图脚本会按 `--demo=` 启动参数自动弹出对应半屏：
+截图 / 录 GIF：
 
 ```bash
-./scripts/capture-screenshots.sh
+./scripts/capture-screenshots.sh   # 静态九宫格用的单帧
+./scripts/capture-tour-gif.sh      # 模拟器录 8 个场景打开过程 → Docs/screenshots/tour.gif
 ```
+
+`--tour` 会按列表顺序带动画打开再关掉这 8 个半屏，给录制用。
 
 ## 何时用哪种 Sheet
 
@@ -83,19 +94,14 @@ xcrun simctl launch <SIM_UDID> com.hwq.PanSheet
 
 源页里没有的用法（一号 / 二号 ActionSheet / 五号穿透 / 嵌套二次 present 等）**没有**做进本 Demo。
 
-## 截图
-
-首页与 8 个半屏打开态（iPhone 17 Pro 模拟器），一张 3×3 拼图，避免 GitHub 把九张原图竖着撑开：
-
-<p align="center">
-  <img src="Docs/screenshots/grid-3x3.png" width="720" alt="首页与 8 个 Sheet 场景九宫格">
-</p>
+静态九宫格单帧：`Docs/screenshots/grid-3x3.png`。
 
 ## 工程结构
 
 ```text
 App/          入口、首页列表、场景枚举
 Demos/        每种用法一个 ViewController，外加半屏壳 / 顶栏 / 底栏
-Docs/screenshots/
+Docs/screenshots/   含 tour.gif 总览与静态九宫格
 scripts/capture-screenshots.sh
+scripts/capture-tour-gif.sh
 ```
