@@ -6,11 +6,22 @@
 
 ## 预览
 
-循环总览：首页列表依次打开 8 个半屏再关掉（iPhone 17 Pro 模拟器，约 20 秒）。只放这一张小尺寸 GIF，GitHub 预览不会竖着撑很高。
+半屏弹出之后，在内容上滑：sheet 跟手上移；再下滑：sheet 跟手下移（列表场景是表内滚动联动，其它场景拖抓手换档）。8 条小 GIF，四列两行，避免 GitHub 竖着撑很高。
 
-<p align="center">
-  <img src="Docs/screenshots/tour.gif" width="280" alt="8 个 Sheet 场景打开过程">
-</p>
+<table>
+  <tr>
+    <td align="center" width="25%"><img src="Docs/screenshots/fixed-1-scroll.gif" width="150" alt="场景1·内容自管"/><br/>场景1·内容自管</td>
+    <td align="center" width="25%"><img src="Docs/screenshots/fixed-2-scroll.gif" width="150" alt="场景2·底栏跟手"/><br/>场景2·底栏跟手</td>
+    <td align="center" width="25%"><img src="Docs/screenshots/fixed-3-scroll.gif" width="150" alt="场景3·钉底栏"/><br/>场景3·钉底栏</td>
+    <td align="center" width="25%"><img src="Docs/screenshots/input-single-scroll.gif" width="150" alt="单行输入"/><br/>单行输入</td>
+  </tr>
+  <tr>
+    <td align="center" width="25%"><img src="Docs/screenshots/input-multi-scroll.gif" width="150" alt="多行输入"/><br/>多行输入</td>
+    <td align="center" width="25%"><img src="Docs/screenshots/list-fill-scroll.gif" width="150" alt="列表铺满"/><br/>列表铺满</td>
+    <td align="center" width="25%"><img src="Docs/screenshots/list-button-scroll.gif" width="150" alt="按钮 Cell"/><br/>按钮 Cell</td>
+    <td align="center" width="25%"><img src="Docs/screenshots/list-pinned-scroll.gif" width="150" alt="列表钉底栏"/><br/>列表钉底栏</td>
+  </tr>
+</table>
 
 ## 怎么跑
 
@@ -33,14 +44,14 @@ xcrun simctl install <SIM_UDID> \
 xcrun simctl launch <SIM_UDID> com.hwq.PanSheet
 ```
 
-截图 / 录 GIF：
+截图 / 录跟手 GIF：
 
 ```bash
-./scripts/capture-screenshots.sh   # 静态九宫格用的单帧
-./scripts/capture-tour-gif.sh      # 模拟器录 8 个场景打开过程 → Docs/screenshots/tour.gif
+./scripts/capture-screenshots.sh    # 静态单帧
+./scripts/capture-scroll-gifs.sh    # 弹出后滚列表 / 拖抓手，8 条 *-scroll.gif
 ```
 
-`--tour` 会按列表顺序带动画打开再关掉这 8 个半屏，给录制用。
+`--hold-sheet` 录制时禁止滑关掉，只在档位之间跟手。
 
 ## 何时用哪种 Sheet
 
@@ -101,7 +112,8 @@ xcrun simctl launch <SIM_UDID> com.hwq.PanSheet
 ```text
 App/          入口、首页列表、场景枚举
 Demos/        每种用法一个 ViewController，外加半屏壳 / 顶栏 / 底栏
-Docs/screenshots/   含 tour.gif 总览与静态九宫格
+Docs/screenshots/   *-scroll.gif 跟手网格，另有静态九宫格
 scripts/capture-screenshots.sh
-scripts/capture-tour-gif.sh
+scripts/capture-scroll-gifs.sh
+scripts/sim-drag.swift
 ```

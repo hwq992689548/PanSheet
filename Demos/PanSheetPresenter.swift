@@ -12,6 +12,10 @@ enum PanSheetPresenter {
     ) {
         content.modalPresentationStyle = .pageSheet
         content.modalTransitionStyle = .coverVertical
+        // 录跟手 GIF 时禁止滑到最低档以下关掉，只在档位之间移动。
+        if ProcessInfo.processInfo.arguments.contains("--hold-sheet") {
+            content.isModalInPresentation = true
+        }
         if let sheet = content.sheetPresentationController {
             sheet.detents = detents.map(\.uiDetent)
             sheet.selectedDetentIdentifier = (selected ?? detents.first)?.identifier
