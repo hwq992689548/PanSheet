@@ -85,19 +85,11 @@ xcrun simctl launch <SIM_UDID> com.hwq.PanSheet
 
 ## 截图
 
-首页与 8 个半屏打开态（iPhone 17 Pro 模拟器）：
+首页与 8 个半屏打开态（iPhone 17 Pro 模拟器），一张 3×3 拼图，避免 GitHub 把九张原图竖着撑开：
 
-| 场景 | 截图 |
-| --- | --- |
-| 首页列表 | ![home](Docs/screenshots/home.png) |
-| 固定高度 · 场景1 | ![fixed-1](Docs/screenshots/fixed-1.png) |
-| 固定高度 · 场景2 | ![fixed-2](Docs/screenshots/fixed-2.png) |
-| 固定高度 · 场景3 | ![fixed-3](Docs/screenshots/fixed-3.png) |
-| 单行输入 | ![input-single](Docs/screenshots/input-single.png) |
-| 多行输入 | ![input-multi](Docs/screenshots/input-multi.png) |
-| 列表铺满 | ![list-fill](Docs/screenshots/list-fill.png) |
-| 按钮 Cell | ![list-button](Docs/screenshots/list-button.png) |
-| 列表钉底栏 | ![list-pinned](Docs/screenshots/list-pinned.png) |
+<p align="center">
+  <img src="Docs/screenshots/grid-3x3.png" width="720" alt="首页与 8 个 Sheet 场景九宫格">
+</p>
 
 ## 工程结构
 
