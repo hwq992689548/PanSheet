@@ -1,0 +1,36 @@
+name: PanSheet
+options:
+  bundleIdPrefix: com.hwq
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "1"
+    IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+    PRODUCT_BUNDLE_IDENTIFIER: com.hwq.PanSheet
+    INFOPLIST_FILE: App/Info.plist
+    GENERATE_INFOPLIST_FILE: false
+    CODE_SIGNING_ALLOWED: "NO"
+    CODE_SIGNING_REQUIRED: "NO"
+    ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: false
+    CURRENT_PROJECT_VERSION: "1"
+    MARKETING_VERSION: "1.0.0"
+    SWIFT_EMIT_LOC_STRINGS: "NO"
+targets:
+  PanSheet:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+      - path: Demos
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.hwq.PanSheet
+        INFOPLIST_FILE: App/Info.plist
+        PRODUCT_NAME: PanSheet
+        CODE_SIGNING_ALLOWED: "NO"
+        CODE_SIGNING_REQUIRED: "NO"
