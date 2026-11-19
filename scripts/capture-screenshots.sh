@@ -30,7 +30,7 @@ if [[ -z "$DEST_ID" ]]; then
 fi
 
 echo "simulator=$DEST_ID"
-xcodebuild -project "$ROOT/PanSheet.xcodeproj" -scheme PanSheetDemo \
+xcodebuild -workspace "$ROOT/PanSheet.xcworkspace" -scheme PanSheetDemo \
   -destination "platform=iOS Simulator,id=$DEST_ID" \
   -derivedDataPath "$DD" \
   CODE_SIGNING_ALLOWED=NO build

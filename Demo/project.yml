@@ -7,7 +7,7 @@ options:
   generateEmptyDirectories: true
 packages:
   PanSheet:
-    path: .
+    path: ..
 settings:
   base:
     SWIFT_VERSION: "5.0"

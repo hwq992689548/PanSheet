@@ -16,11 +16,13 @@ https://github.com/hwq992689548/PanSheet
 
 Dependency Rule 选 Branch `main`，或 Version：Up to Next Major from `1.0.0`。
 
-**本地路径**
+**本地路径（选含 `Package.swift` 的仓库根，不要选 xcodeproj）**
 
 ```text
 /Users/你/path/PanSheet
 ```
+
+Xcode：Add Package Dependencies → Add Local… → 选这个根目录。产品名是 **PanSheet**。
 
 Swift Package 清单：
 
@@ -111,14 +113,19 @@ PanSheetPresenter.dismiss(from: content)
 ## 怎么跑 Demo
 
 1. 安装 Xcode 16+（本机验证用 Xcode 26 / iOS 26 模拟器）。
-2. 打开 `PanSheet.xcodeproj`，选 scheme **PanSheetDemo**，iPhone 模拟器。
-3. 运行。首页就是源页「Sheet 场景」的入口列表。
-4. 点某一行，弹出对应半屏。拖抓手换档、点遮罩或右上勾 /「确定」关闭。
+2. 用 Xcode 打开 **`PanSheet.xcworkspace`**（不要打开仓库根上已删除的 `PanSheet.xcodeproj`：它和 `Package.swift` 同级，会报 Missing package product）。
+3. 选 scheme **PanSheetDemo**，iPhone 模拟器。也可以只打开 `Demo/PanSheet.xcodeproj`，它用本地包路径 `..`。
+4. 运行。首页就是源页「Sheet 场景」的入口列表。点某一行弹出对应半屏。
+
+重新生成 Demo 工程：
+
+```bash
+./scripts/generate-demo.sh
+```
 
 ```bash
 cd /path/to/PanSheet
-xcodegen generate
-xcodebuild -project PanSheet.xcodeproj -scheme PanSheetDemo \
+xcodebuild -workspace PanSheet.xcworkspace -scheme PanSheetDemo \
   -destination 'platform=iOS Simulator,id=<SIM_UDID>' \
   -derivedDataPath build/DerivedData \
   CODE_SIGNING_ALLOWED=NO build
@@ -174,10 +181,11 @@ xcrun simctl launch <SIM_UDID> com.hwq.PanSheet
 ## 工程结构
 
 ```text
-Package.swift            Swift Package（产品名 PanSheet）
-Sources/PanSheet/        可复用 UIKit：Presenter / Config / 档位 / 顶栏底栏
-App/ + Demos/            Demo App 场景页，依赖 Package，不再内嵌一份实现
-PanSheet.xcodeproj       scheme PanSheetDemo
-Docs/screenshots/        *-scroll.gif 跟手网格
-scripts/
+Package.swift                 Swift Package（产品名 PanSheet，给别的工程 Add Package）
+Sources/PanSheet/             可复用 UIKit
+PanSheet.xcworkspace          打开这个：含本地包 + Demo
+Demo/PanSheet.xcodeproj       Demo App，本地 SPM 引用 path: ..
+Demo/App + Demo/Demos         场景页
+Docs/screenshots/
+scripts/generate-demo.sh
 ```
